@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>Got Aflac? - Nelli Gordon</title>
 
@@ -17,15 +17,24 @@ html, body {
     padding: 0;
     width: 100%;
     height: 100%;
+    min-height: 100%;
     overflow: hidden;
     overscroll-behavior: none;
-    background: #ffffff;
+    background: #000000;
 }
 
-/* Keep the flyer centered and entirely inside the visible browser window. */
+/* Full-bleed layout: mobile fills the available screen; desktop contains
+   the complete flyer within the viewport without page scrolling. */
+html {
+    background: #000000;
+}
+
 body {
     position: fixed;
     inset: 0;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
     display: grid;
     place-items: center;
     overflow: hidden;
@@ -33,27 +42,12 @@ body {
 
 .flyer {
     position: relative;
-    width: min(100vw, calc(100vh * 1025 / 1463));
-    height: auto;
+    width: min(100vw, calc(100dvh * 1025 / 1463));
+    height: min(100dvh, calc(100vw * 1463 / 1025));
     max-width: 100vw;
-    max-height: 100vh;
+    max-height: 100dvh;
     aspect-ratio: 1025 / 1463;
     flex-shrink: 0;
-}
-
-/* Dynamic viewport sizing accounts for mobile browser bars; svh is the fallback. */
-@supports (height: 100svh) {
-    .flyer {
-        width: min(100vw, calc(100svh * 1025 / 1463));
-        max-height: 100svh;
-    }
-}
-
-@supports (height: 100dvh) {
-    .flyer {
-        width: min(100vw, calc(100dvh * 1025 / 1463));
-        max-height: 100dvh;
-    }
 }
 
 .flyer img {
@@ -61,6 +55,52 @@ body {
     width: 100%;
     height: 100%;
     object-fit: fill;
+}
+
+/* On phones, eliminate all page-edge gaps by filling the entire viewport.
+   The artwork scales independently in each direction to preserve full coverage. */
+@media (max-width: 767px), (max-height: 500px) and (pointer: coarse) {
+    body {
+        height: 100vh;
+        height: 100dvh;
+    }
+
+    .flyer {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        max-width: none;
+        max-height: none;
+        aspect-ratio: auto;
+    }
+}
+
+/* Older iOS Safari fallback; modern browsers use dynamic viewport units above. */
+@supports (height: 100svh) {
+    body {
+        height: 100svh;
+    }
+    .flyer {
+        width: min(100vw, calc(100svh * 1025 / 1463));
+        height: min(100svh, calc(100vw * 1463 / 1025));
+    }
+}
+
+@supports (height: 100dvh) {
+    body {
+        height: 100dvh;
+    }
+    .flyer {
+        width: min(100vw, calc(100dvh * 1025 / 1463));
+        height: min(100dvh, calc(100vw * 1463 / 1025));
+    }
+}
+
+@media (max-width: 767px), (max-height: 500px) and (pointer: coarse) {
+    .flyer {
+        width: 100vw;
+        height: 100dvh;
+    }
 }
 
 /* Phone action button: updated to the supplied glossy blue style */
