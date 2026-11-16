@@ -23,10 +23,10 @@ html, body {
     background: #000000;
 }
 
-/* Full-bleed layout: mobile fills the available screen; desktop contains
-   the complete flyer within the viewport without page scrolling. */
+/* Preserve the original flyer proportions on every screen. The flyer is
+   contained within the viewport; any unused space remains clean white space. */
 html {
-    background: #000000;
+    background: #ffffff;
 }
 
 body {
@@ -38,6 +38,7 @@ body {
     display: grid;
     place-items: center;
     overflow: hidden;
+    background: #ffffff;
 }
 
 .flyer {
@@ -54,53 +55,7 @@ body {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: fill;
-}
-
-/* On phones, eliminate all page-edge gaps by filling the entire viewport.
-   The artwork scales independently in each direction to preserve full coverage. */
-@media (max-width: 767px), (max-height: 500px) and (pointer: coarse) {
-    body {
-        height: 100vh;
-        height: 100dvh;
-    }
-
-    .flyer {
-        width: 100vw;
-        height: 100vh;
-        height: 100dvh;
-        max-width: none;
-        max-height: none;
-        aspect-ratio: auto;
-    }
-}
-
-/* Older iOS Safari fallback; modern browsers use dynamic viewport units above. */
-@supports (height: 100svh) {
-    body {
-        height: 100svh;
-    }
-    .flyer {
-        width: min(100vw, calc(100svh * 1025 / 1463));
-        height: min(100svh, calc(100vw * 1463 / 1025));
-    }
-}
-
-@supports (height: 100dvh) {
-    body {
-        height: 100dvh;
-    }
-    .flyer {
-        width: min(100vw, calc(100dvh * 1025 / 1463));
-        height: min(100dvh, calc(100vw * 1463 / 1025));
-    }
-}
-
-@media (max-width: 767px), (max-height: 500px) and (pointer: coarse) {
-    .flyer {
-        width: 100vw;
-        height: 100dvh;
-    }
+    object-fit: contain;
 }
 
 /* Phone action button: updated to the supplied glossy blue style */
